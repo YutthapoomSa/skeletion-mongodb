@@ -2,16 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ConfigService } from './../../../config/config.service';
 import { UserDB, UserDBGender, UserDBPrefix, UserDBRole } from './../../../entities/user.entity';
 import { ResStatus } from './../../../share/enum/res-status.enum';
+import { IsEmail } from 'class-validator';
 
 class LoginUserResDTOResData {
     @ApiProperty()
     id: String;
 
     @ApiProperty()
-    username: String;
+    email: String;
 
     @ApiProperty()
-    nickname: String;
+    username: String;
 
     @ApiProperty({
         enum: Object.keys(UserDBPrefix).map((k) => UserDBPrefix[k]),
@@ -75,8 +76,8 @@ export class LoginUserResDTO {
         const config = new ConfigService();
         if (!!datas) {
             this.resData.id = datas._id;
+            this.resData.email = datas.email;
             this.resData.username = datas.username;
-            this.resData.nickname = datas.nickname;
             this.resData.prefix = datas.prefix;
             this.resData.firstName = datas.firstName;
             this.resData.lastName = datas.lastName;

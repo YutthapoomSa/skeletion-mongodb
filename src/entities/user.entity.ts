@@ -13,9 +13,9 @@ export enum UserDBGender {
 }
 
 export enum UserDBPrefix {
-    Miss = 'นางสาว',
-    Mrs = 'นาง',
     Mr = 'นาย',
+    Mrs = 'นาง',
+    Miss = 'นางสาว',
 }
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -30,6 +30,12 @@ export class UserDB extends Document {
         required: true,
         unique: true,
     })
+    email: string;
+
+    @Prop({
+        type: MongooseSchema.Types.String,
+        required: true,
+    })
     username: string;
 
     @Prop({
@@ -37,12 +43,6 @@ export class UserDB extends Document {
         required: false,
     })
     password: string;
-
-    @Prop({
-        type: MongooseSchema.Types.String,
-        required: true,
-    })
-    nickname: string;
 
     @Prop({
         enum: Object.keys(UserDBPrefix).map((k) => UserDBPrefix[k]),
@@ -71,6 +71,7 @@ export class UserDB extends Document {
     @Prop({
         type: MongooseSchema.Types.String,
         required: false,
+        default: 'avatar.png',
     })
     imageUser: string;
 
@@ -82,12 +83,12 @@ export class UserDB extends Document {
 
     @Prop({
         enum: Object.keys(UserDBRole).map((k) => UserDBRole[k]),
+        default: UserDBRole.User,
     })
     role: UserDBRole;
 
     @Prop({ default: Date.now })
     createdAt: Date;
- 
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDB);

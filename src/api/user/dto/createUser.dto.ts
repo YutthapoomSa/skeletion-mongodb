@@ -1,8 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { UserDBGender, UserDBPrefix, UserDBRole } from './../../../entities/user.entity';
 
 export class CreateUserDto {
+    @ApiProperty()
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
@@ -23,11 +28,6 @@ export class CreateUserDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    nickname: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
     firstName: string;
 
     @ApiProperty()
@@ -40,22 +40,10 @@ export class CreateUserDto {
     @IsNotEmpty()
     phoneNumber: string;
 
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    imageUser: string;
-
     @ApiProperty({
         enum: Object.keys(UserDBGender).map((k) => UserDBGender[k]),
     })
     @IsNotEmpty()
     @IsString()
     gender: UserDBGender;
-
-    @ApiProperty({
-        enum: Object.keys(UserDBRole).map((k) => UserDBRole[k]),
-    })
-    @IsNotEmpty()
-    @IsString()
-    role: UserDBRole;
 }

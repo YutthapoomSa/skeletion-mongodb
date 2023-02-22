@@ -5,6 +5,7 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { LogService } from './services/log.service';
 import { ShareModule } from './share/share.module';
+import { GroupModule } from './api/group/group.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { ShareModule } from './share/share.module';
             useFactory: async (configService: ConfigService) => configService.getMongoConfig(),
         }),
         UserModule,
+        GroupModule,
     ],
     controllers: [],
     providers: [LogService],

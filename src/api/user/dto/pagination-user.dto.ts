@@ -2,7 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import moment from 'moment';
 import { ResStatus } from './../../../share/enum/res-status.enum';
-import { UserDB, UserDBGender, UserDBPosition, UserDBPrefix, UserDBRole } from './../../../entities/user.entity';
+import { UserDB, UserDBGender, UserDBPrefix, UserDBRole } from './../../../entities/user.entity';
+import { ConfigService } from 'src/config/config.service';
 
 export class UserPaginationDTO {
     @ApiProperty({
@@ -30,12 +31,12 @@ export class UserPaginationDTO {
 export class UserPaginationResDTOResDatas {
     @ApiProperty()
     id: String;
+   
+    @ApiProperty()
+    email: String;
 
     @ApiProperty()
     username: String;
-
-    @ApiProperty()
-    nickname: String;
 
     @ApiProperty({
         enum: Object.keys(UserDBPrefix).map((k) => UserDBPrefix[k]),
@@ -126,18 +127,19 @@ export class UserPaginationResDTO {
         _resData.currentPage = currentPage;
         _resData.totalPages = totalPages;
         _resData.datas = [];
+        const config = new ConfigService();
 
         if (!!data && data.length > 0) {
             for (const item of data) {
                 const _data = new UserPaginationResDTOResDatas();
                 _data.id = item.id;
+                _data.email = item.email;
                 _data.username = item.username;
-                _data.nickname = item.nickname;
                 _data.prefix = item.prefix;
                 _data.firstName = item.firstName;
                 _data.lastName = item.lastName;
                 _data.phoneNumber = item.phoneNumber;
-                _data.imageUser = item.imageUser;
+                _data.imageUser = item.imageUser ? config.imagePath().userProfileImagePath + '/' + item.imageUser : '';
                 _data.gender = item.gender;
                 _data.role = item.role;
                 _data.createdAt = moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss');

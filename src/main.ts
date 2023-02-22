@@ -36,6 +36,7 @@ async function bootstrap() {
 
     const pathProfile = pathUploadPath + '/profile';
     if (!fs.existsSync(pathProfile)) fs.mkdirSync(pathProfile);
+    app.useStaticAssets(path.resolve(__dirname, './../upload', 'profile'), { prefix: '/profile' });
 
     // const axios = require('axios');
 

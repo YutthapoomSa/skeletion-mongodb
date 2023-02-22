@@ -7,12 +7,12 @@ import { ResStatus } from './../../../share/enum/res-status.enum';
 export class FindAllUserResDTOData {
     @ApiProperty()
     id: ObjectId;
+    
+    @ApiProperty()
+    email: string;
 
     @ApiProperty()
     username: string;
-
-    @ApiProperty()
-    nickname: string;
 
     @ApiProperty({
         enum: Object.keys(UserDBPrefix).map((k) => UserDBPrefix[k]),
@@ -70,8 +70,8 @@ export class FindAllUserResDTO {
             for (const iterator of datas) {
                 const _data = new FindAllUserResDTOData();
                 _data.id = iterator._id;
+                _data.email = iterator.email;
                 _data.username = iterator.username;
-                _data.nickname = iterator.nickname;
                 _data.prefix = iterator.prefix;
                 _data.firstName = iterator.firstName;
                 _data.lastName = iterator.lastName;

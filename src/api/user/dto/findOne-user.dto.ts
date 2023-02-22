@@ -11,15 +11,15 @@ export class FindOneUserByIdResDto {
     username: string;
 
     @ApiProperty()
+    email: string;
+
+    @ApiProperty()
     password: string;
 
     @ApiProperty({
         enum: Object.keys(UserDBPrefix).map((k) => UserDBPrefix[k]),
     })
     prefix: UserDBPrefix;
-
-    @ApiProperty()
-    nickname: string;
 
     @ApiProperty()
     firstName: string;
@@ -70,13 +70,13 @@ export class FindOneUserDTO {
 
         if (!!datas) {
             this.resData.id = datas._id;
+            this.resData.email = datas.email;
             this.resData.username = datas.username;
-            this.resData.nickname = datas.nickname;
             this.resData.prefix = datas.prefix;
             this.resData.firstName = datas.firstName;
             this.resData.lastName = datas.lastName;
             this.resData.phoneNumber = datas.phoneNumber;
-            this.resData.imageUser = datas.imageUser ? config.imagePath().userProfileImagePath + '/' + datas.imageUser : '';
+            this.resData.imageUser = datas.imageUser ? config.imagePathOut().userProfile + '/' + datas.imageUser : '';
             this.resData.gender = datas.gender;
             this.resData.role = datas.role;
         }

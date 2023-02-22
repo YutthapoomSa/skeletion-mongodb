@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsEmail } from 'class-validator';
 import { ConfigService } from './../../../config/config.service';
 import { UserDB } from './../../../entities/user.entity';
 import { ResStatus } from './../../../share/enum/res-status.enum';
@@ -9,6 +9,11 @@ export class UpdateUserReqDto {
     @IsString()
     @IsNotEmpty()
     username: string;
+
+    @ApiProperty()
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 
     @ApiProperty()
     @IsOptional()
@@ -31,6 +36,9 @@ export class UpdateUserResDTOData {
 
     @ApiProperty()
     username: string;
+   
+    @ApiProperty()
+    email: string;
 
     @ApiProperty()
     password: string;
@@ -69,6 +77,7 @@ export class UpdateUserResDTO {
         if (!!datas) {
             this.resData.id  = datas._id;
             this.resData.username = datas.username;
+            this.resData.email = datas.email;
             this.resData.password = datas.password;
             this.resData.phoneNumber = datas.phoneNumber;
             this.resData.imageUser = datas.imageUser ? config.imagePath().userProfileImagePath + '/' + datas.imageUser : '';

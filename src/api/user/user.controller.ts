@@ -17,6 +17,7 @@ import { LogService } from './../../services/log.service';
 import { CreateUserImage } from './dto/create-user-image.dto';
 import { LoginUserResDTO } from './dto/login-user.dto';
 import { UpdateUserReqDto } from './dto/updateUser.dto';
+import { UserPaginationDTO, UserPaginationResDTO } from './dto/pagination-user.dto';
 moment.tz.setDefault('Asia/Bangkok');
 
 @ApiTags('user')
@@ -59,14 +60,14 @@ export class UserController {
     //     return await this.userService.getUserById(user.id);
     // }
 
-    // @Post('paginationUser')
-    // // @ApiBearerAuth()
-    // // @UseGuards(AuthGuard('jwt'))
-    // @ApiOkResponse({ type: UserPaginationResDTO })
-    // @ApiOperation({ summary: 'pagination user' })
-    // async paginationDocument(@Body() paginationDTO: UserPaginationDTO) {
-    //     return await this.userRepository.userPagination(paginationDTO);
-    // }
+    @Post('paginationUser')
+    // @ApiBearerAuth()
+    // @UseGuards(AuthGuard('jwt'))
+    @ApiOkResponse({ type: UserPaginationResDTO })
+    @ApiOperation({ summary: 'pagination user' })
+    async paginationUser(@Body() paginationDTO: UserPaginationDTO) {
+        return await this.userRepository.userPagination(paginationDTO);
+    }
 
     @Patch('update/:userId')
     @ApiBearerAuth()

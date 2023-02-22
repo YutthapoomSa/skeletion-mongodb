@@ -39,10 +39,18 @@ export class ConfigService {
     }
     public imagePath() {
         return {
-            userProfileImagePath: 'http://localhost:3000/profile',
+            // userProfileImagePath: 'http://localhost:3000/upload/profile',
+            userProfileImagePath: 'https://f907-119-76-182-47.ap.ngrok.io/upload/profile',
             // userImagePath: 'https://api-siamit-cleanup.flowmisite.com/userImage',
             // resultAssessmentImagePath: 'https://api-siamit-cleanup.flowmisite.com/ResultImageAssessment',
             // resultAssessmentImagePath: 'http://localhost:3000/ResultImageAssessment',
+        };
+    }
+
+    public imagePathOut() {
+        return {
+            // userProfile : 'http://localhost:3000/profile',
+            userProfile: 'https://f907-119-76-182-47.ap.ngrok.io/profile',
         };
     }
 
