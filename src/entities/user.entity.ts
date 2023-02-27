@@ -3,10 +3,10 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 import { GroupDB } from './group.entity';
 
 export enum UserDBRole {
-    User = 'ผู้ใช้งานทั่วไป',
-    Admin = 'ผู้ดูแลระบบ',
-    SuperAdmin = 'ผู้ดูแลระบบขั้นสูง',
-    Manager = 'ผู้บริหาร',
+    User = 'User',
+    Admin = 'Admin',
+    SuperAdmin = 'SuperAdmin',
+    Manager = 'Manager',
 }
 
 export enum UserDBGender {

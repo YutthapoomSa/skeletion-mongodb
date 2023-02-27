@@ -7,12 +7,12 @@ import { ResStatus } from './../../../share/enum/res-status.enum';
 export class UpdateUserReqDto {
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     username: string;
 
     @ApiProperty()
     @IsEmail()
-    @IsNotEmpty()
+    @IsOptional()
     email: string;
 
     @ApiProperty()
@@ -22,7 +22,7 @@ export class UpdateUserReqDto {
 
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     phoneNumber: string;
 
     @ApiProperty()

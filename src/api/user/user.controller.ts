@@ -27,6 +27,10 @@ export class UserController {
     constructor(private userService: UserService, private userRepository: UserRepository) {}
 
     // ────────────────────────────────────────────────────────────────────────────────
+    @Post('fakedoc')
+    async fakedoc() {
+        return await this.userRepository.fakeDoc();
+    }
 
     @Post('createUser')
     @ApiOkResponse({ type: CreateUserDto })
@@ -44,7 +48,7 @@ export class UserController {
     // @ApiBearerAuth()
     // @UseGuards(AuthGuard('jwt'))
     async getCompanyById(@Param('id') id: string) {
-        return await this.userService.getUserById(`${id}`);
+        return await this.userService.getUserById(id);
     }
 
     @Get('/findAllUser')
@@ -83,7 +87,7 @@ export class UserController {
         return await this.userService.deleteUserByUserId(userId, user);
     }
 
-    @Post('uploads-image/users')
+    @Post('uploads-image/imageUser')
     @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'เพิ่มรูปภาพของผู้ใช้งาน' })
     @UseInterceptors(

@@ -80,7 +80,7 @@ export class UserService {
             const signLogin = await this.signToken(userLogin);
             return new LoginUserResDTO(
                 ResStatus.success,
-                '🥁 ลงชื่อเข้าใช้งานสำเร็จ 🥁',
+                'ลงชื่อเข้าใช้งานสำเร็จ 🥁',
                 userLogin,
                 signLogin.accessToken,
                 signLogin.refreshToken,
@@ -141,14 +141,5 @@ export class UserService {
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
-    async findOne(id: string) {
-        const tag = this.findOne.name;
-        try {
-            const findOne = await this.userRepository.findOneUser(id);
-            return new FindOneUserDTO(ResStatus.success, '', findOne);
-        } catch (error) {
-            this.logger.error(`${tag} -> `, error);
-            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    
 }

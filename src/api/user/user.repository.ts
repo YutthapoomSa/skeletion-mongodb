@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema as MongooseSchema } from 'mongoose';
 import { GlobalResDTO } from '../global-dto/global-res.dto';
 import { ConfigService } from './../../config/config.service';
-import { UserDB, UserDBGender, UserDBRole } from './../../entities/user.entity';
+import { UserDB, UserDBGender } from './../../entities/user.entity';
 import { LogService } from './../../services/log.service';
 import { PaginationService } from './../../services/pagination.service';
 import { ResStatus } from './../../share/enum/res-status.enum';
@@ -29,19 +29,19 @@ export class UserRepository implements OnApplicationBootstrap {
         try {
             for (let index = 0; index < 50; index++) {
                 const x = faker.internet.userName();
+                const n = faker.internet.userName();
+                const e = faker.internet.email();
                 // const firstName = faker.name.firstName();
                 const _create = new this.userModel({
+                    email: e,
                     username: x,
                     password: CryptoJS.AES.encrypt(x, this.KEY_PASSWORD),
                     prefix: 'Mr',
-                    nickname: 'wave',
+                    nickname: n,
                     firstName: faker.name.firstName(),
                     lastName: faker.name.lastName(),
-                    position: 'Housekeeper',
                     phoneNumber: faker.phone.phoneNumber().replace('-', ''),
-                    imageUser: 'string',
                     gender: UserDBGender.FEMALE,
-                    role: UserDBRole.User,
                 });
 
                 await _create.save();
@@ -260,7 +260,7 @@ export class UserRepository implements OnApplicationBootstrap {
             findUserById.imageUser = imageUser[0].filename;
             await findUserById.save();
 
-            return new GlobalResDTO(ResStatus.success, 'อัพโหลดรูปสำเร็จ');
+            return new GlobalResDTO(ResStatus.success, 'อัพโหลดรูปสำเร็จ 📷');
         } catch (error) {
             console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);
