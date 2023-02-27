@@ -78,7 +78,7 @@ export class FindOneUserDTO {
             this.resData.phoneNumber = datas.phoneNumber;
             this.resData.imageUser = datas.imageUser ? config.imagePathOut().userProfile + '/' + datas.imageUser : '';
             this.resData.gender = datas.gender;
-            this.resData.role = datas.role;
+            // this.resData.role = datas.role;
         }
     }
 }

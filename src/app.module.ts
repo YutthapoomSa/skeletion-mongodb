@@ -6,6 +6,8 @@ import { ConfigService } from './config/config.service';
 import { LogService } from './services/log.service';
 import { ShareModule } from './share/share.module';
 import { GroupModule } from './api/group/group.module';
+import { MenuModule } from './api/menu/menu.module';
+import { MenuModule } from './api/menu/menu.module';
 
 @Module({
     imports: [
@@ -17,6 +19,7 @@ import { GroupModule } from './api/group/group.module';
         }),
         UserModule,
         GroupModule,
+        MenuModule,
     ],
     controllers: [],
     providers: [LogService],

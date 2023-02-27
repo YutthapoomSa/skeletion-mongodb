@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { v4 as uuidv4 } from 'uuid';
 import { GlobalResDTO } from '../global-dto/global-res.dto';
 import { ConfigService } from './../../config/config.service';
-import { UserDB, UserDBRole } from './../../entities/user.entity';
+import { UserDB } from './../../entities/user.entity';
 import { EncryptionService } from './../../services/encryption.service';
 import { LogService } from './../../services/log.service';
 import { PaginationService } from './../../services/pagination.service';
@@ -36,7 +36,7 @@ export class UserService {
         const tag = this.createUser.name;
         try {
             const resultUser = await this.userRepository.createUser(createUserDto);
-            return new FindOneUserDTO(ResStatus.success, '♥ สร้างข้อมูลผู้ใช้งานสำเร็จ ♥', resultUser);
+            return new FindOneUserDTO(ResStatus.success, '🐤 สร้างข้อมูลผู้ใช้งานสำเร็จ 🐤', resultUser);
         } catch (error) {
             this.logger.error(`${tag} -> `, error);
             throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,7 +49,7 @@ export class UserService {
         const tag = this.getUserById.name;
         try {
             const resultUser = await this.userRepository.getUserById(id);
-            return new FindOneUserDTO(ResStatus.success, '♥ สำเร็จ ♥', resultUser);
+            return new FindOneUserDTO(ResStatus.success, '🎉 สำเร็จ 🎉', resultUser);
         } catch (error) {
             this.logger.error(`${tag} -> `, error);
             throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,7 +60,7 @@ export class UserService {
         const tag = this.findAllUser.name;
         try {
             const resultUser = await this.userRepository.findAllUser();
-            return new FindAllUserResDTO(ResStatus.success, '♥ ค้นหาสำเร็จ ♥', resultUser);
+            return new FindAllUserResDTO(ResStatus.success, '🎉 ค้นหาสำเร็จ 🎉', resultUser);
         } catch (error) {
             this.logger.error(`${tag} -> `, error);
             throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -80,7 +80,7 @@ export class UserService {
             const signLogin = await this.signToken(userLogin);
             return new LoginUserResDTO(
                 ResStatus.success,
-                '♥ ลงชื่อเข้าใช้งานสำเร็จ ♥',
+                '🥁 ลงชื่อเข้าใช้งานสำเร็จ 🥁',
                 userLogin,
                 signLogin.accessToken,
                 signLogin.refreshToken,

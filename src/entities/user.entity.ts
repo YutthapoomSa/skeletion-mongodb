@@ -1,9 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { GroupDB } from './group.entity';
 
 export enum UserDBRole {
-    User = 'ผู้ใช้งาน',
+    User = 'ผู้ใช้งานทั่วไป',
     Admin = 'ผู้ดูแลระบบ',
+    SuperAdmin = 'ผู้ดูแลระบบขั้นสูง',
+    Manager = 'ผู้บริหาร',
 }
 
 export enum UserDBGender {
@@ -21,6 +24,27 @@ export enum UserDBPrefix {
 // ────────────────────────────────────────────────────────────────────────────────
 
 @Schema({
+    collection: 'userRole',
+    _id: true,
+})
+export class UserRoleDB extends Document {
+    @Prop({
+        enum: Object.keys(UserDBRole).map((k) => UserDBRole[k]),
+        required: true,
+        default: UserDBRole.User,
+    })
+    role: UserDBRole;
+
+    @Prop({
+        type: MongooseSchema.Types.ObjectId,
+        ref: GroupDB.name,
+        required: false,
+    })
+    group: MongooseSchema.Types.ObjectId;
+}
+export const UserRoleSchema = SchemaFactory.createForClass(UserRoleDB);
+
+@Schema({
     collection: 'user',
     _id: true,
 })
@@ -28,7 +52,6 @@ export class UserDB extends Document {
     @Prop({
         type: MongooseSchema.Types.String,
         required: true,
-        unique: true,
     })
     email: string;
 
@@ -80,6 +103,11 @@ export class UserDB extends Document {
         required: true,
     })
     gender: UserDBGender;
+
+    // @Prop({
+    //     type: [UserRoleSchema],
+    // })
+    // role: UserRoleDB[];
 
     @Prop({
         enum: Object.keys(UserDBRole).map((k) => UserDBRole[k]),

@@ -72,8 +72,8 @@ export class UserRepository implements OnApplicationBootstrap {
         try {
             if (!createUserDto) throw new Error('data is required');
 
-            const isEmail = await this.isEmail(createUserDto.email);
-            if (isEmail) throw new Error('อีเมลนี้ถูกใช้ไปแล้ว');
+            // const isEmail = await this.isEmail(createUserDto.email);
+            // if (isEmail) throw new Error('อีเมลนี้ถูกใช้ไปแล้ว');
             const config = new ConfigService();
 
             const _user = new this.userModel(
@@ -311,7 +311,7 @@ export class UserRepository implements OnApplicationBootstrap {
         try {
             if (!userId) throw new Error('userId is required');
             if (!user) throw new Error('Not Authorized');
-            if (user.role !== UserDBRole.Admin) throw new Error('Not Authorized');
+            // if (user.role !== UserDBRole.Admin) throw new Error('Not Authorized');
 
             const removeUser = await this.userModel.findByIdAndRemove(userId);
             if (!removeUser) throw new Error('User not found');
