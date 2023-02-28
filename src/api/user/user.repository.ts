@@ -191,58 +191,58 @@ export class UserRepository implements OnApplicationBootstrap {
 
     // ────────────────────────────────────────────────────────────────────────────────
 
-    async userPagination(paginationDTO: UserPaginationDTO) {
-        const tag = this.userPagination.name;
-        try {
-            const resData = {
-                totalItems: 0,
-                itemsPerPage: 0,
-                totalPages: 0,
-                currentPage: paginationDTO.page,
-                data: [],
-            };
+    // async userPagination(paginationDTO: UserPaginationDTO) {
+    //     const tag = this.userPagination.name;
+    //     try {
+    //         const resData = {
+    //             totalItems: 0,
+    //             itemsPerPage: 0,
+    //             totalPages: 0,
+    //             currentPage: paginationDTO.page,
+    //             data: [],
+    //         };
 
-            let conditionFind = {};
+    //         let conditionFind = {};
 
-            if (paginationDTO?.search) {
-                conditionFind = {
-                    $or: [
-                        { firstName: { $regex: '.*' + paginationDTO.search + '.*' } },
-                        { lastName: { $regex: '.*' + paginationDTO.search + '.*' } },
-                        { role: { $regex: '.*' + paginationDTO.search + '.*' } },
-                    ],
-                };
-            }
+    //         if (paginationDTO?.search) {
+    //             conditionFind = {
+    //                 $or: [
+    //                     { firstName: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                     { lastName: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                     { role: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                 ],
+    //             };
+    //         }
 
-            // จำนวนข้อมูลทั้งหมด ตามเงื่อนไข
-            resData.totalItems = await this.userModel.count(conditionFind);
+    //         // จำนวนข้อมูลทั้งหมด ตามเงื่อนไข
+    //         resData.totalItems = await this.userModel.count(conditionFind);
 
-            // คำนวณชุดข้อมูล
-            const padding = this.paginationService.paginationCal(resData.totalItems, paginationDTO.perPages, paginationDTO.page);
+    //         // คำนวณชุดข้อมูล
+    //         const padding = this.paginationService.paginationCal(resData.totalItems, paginationDTO.perPages, paginationDTO.page);
 
-            resData.totalPages = padding.totalPages;
+    //         resData.totalPages = padding.totalPages;
 
-            resData.data = await this.userModel.find(conditionFind).select('-__v -password').limit(padding.limit).skip(padding.skips);
+    //         resData.data = await this.userModel.find(conditionFind).select('-__v -password').limit(padding.limit).skip(padding.skips);
 
-            resData.itemsPerPage = resData.data.length;
+    //         resData.itemsPerPage = resData.data.length;
 
-            // user ─────────────────────────────────────────────────────────────────────────────────
+    //         // user ─────────────────────────────────────────────────────────────────────────────────
 
-            return new UserPaginationResDTO(
-                ResStatus.success,
-                '',
-                resData.data,
-                resData.totalItems,
-                resData.itemsPerPage,
-                resData.totalPages,
-                resData.currentPage,
-            );
-        } catch (error) {
-            console.error(`${tag} -> `, error);
-            this.logger.error(`${tag} -> `, error);
-            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //         return new UserPaginationResDTO(
+    //             ResStatus.success,
+    //             '',
+    //             resData.data,
+    //             resData.totalItems,
+    //             resData.itemsPerPage,
+    //             resData.totalPages,
+    //             resData.currentPage,
+    //         );
+    //     } catch (error) {
+    //         console.error(`${tag} -> `, error);
+    //         this.logger.error(`${tag} -> `, error);
+    //         throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     async uploadUserImage(imageUser: Express.Multer.File[], _userId: string, body: CreateUserImage) {
         const tag = this.uploadUserImage.name;

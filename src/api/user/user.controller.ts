@@ -64,14 +64,14 @@ export class UserController {
     //     return await this.userService.getUserById(user.id);
     // }
 
-    @Post('paginationUser')
-    // @ApiBearerAuth()
-    // @UseGuards(AuthGuard('jwt'))
-    @ApiOkResponse({ type: UserPaginationResDTO })
-    @ApiOperation({ summary: 'pagination user' })
-    async paginationUser(@Body() paginationDTO: UserPaginationDTO) {
-        return await this.userRepository.userPagination(paginationDTO);
-    }
+    // @Post('paginationUser')
+    // // @ApiBearerAuth()
+    // // @UseGuards(AuthGuard('jwt'))
+    // @ApiOkResponse({ type: UserPaginationResDTO })
+    // @ApiOperation({ summary: 'pagination user' })
+    // async paginationUser(@Body() paginationDTO: UserPaginationDTO) {
+    //     return await this.userRepository.userPagination(paginationDTO);
+    // }
 
     @Patch('update/:userId')
     @ApiBearerAuth()

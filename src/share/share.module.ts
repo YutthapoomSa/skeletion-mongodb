@@ -11,6 +11,7 @@ import { PaginationService } from './../services/pagination.service';
 import { ThirdPartyLineService } from './../services/third-party-line.service';
 import { GroupDB } from './../entities/group.entity';
 import { GroupSchema } from './../entities/group.entity';
+import { RoleDB, RoleSchema } from 'src/entities/role.entity';
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { GroupSchema } from './../entities/group.entity';
             { name: UserDB.name, schema: UserSchema, discriminators: [{ name: UserRoleDB.name, schema: UserRoleSchema }] },
             { name: MenuDB.name, schema: MenuSchema, discriminators: [{ name: SubMenuDB.name, schema: SubMenuSchema }] },
             { name: GroupDB.name, schema: GroupSchema },
+            { name: RoleDB.name, schema: RoleSchema },
         ]),
 
         HttpModule.register({

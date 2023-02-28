@@ -31,7 +31,7 @@ export class ConfigService {
     public async getMongoConfig() {
         return {
             // uri: 'mongodb+srv://' + this.get('MONGO_USER') + ':' + this.get('MONGO_PASSWORD') + '@' + this.get('MONGO_HOST') + '/' + this.get('MONGO_DATABASE'),
-             uri: 'mongodb://root:123456@internal.neercode.com:27017/skeletion?authSource=admin&readPreference=primary&directConnection=true&ssl=false',
+            uri: 'mongodb://root:123456@internal.neercode.com:27017/skeletion?authSource=admin&readPreference=primary&directConnection=true&ssl=false',
             // mongosh "mongodb+srv://cluster0.lx2wdhp.mongodb.net/myFirstDatabase" --apiVersion 1 --username admin
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -40,7 +40,7 @@ export class ConfigService {
     public imagePath() {
         return {
             // userProfileImagePath: 'http://localhost:3000/upload/profile',
-            userProfileImagePath: 'https://0bef-119-76-182-47.ap.ngrok.io/upload/profile',
+            userProfileImagePath: 'https://aeb1-119-76-182-47.ap.ngrok.io/upload/profile',
             // userImagePath: 'https://api-siamit-cleanup.flowmisite.com/userImage',
             // resultAssessmentImagePath: 'https://api-siamit-cleanup.flowmisite.com/ResultImageAssessment',
             // resultAssessmentImagePath: 'http://localhost:3000/ResultImageAssessment',
@@ -50,7 +50,7 @@ export class ConfigService {
     public imagePathOut() {
         return {
             // userProfile : 'http://localhost:3000/profile',
-            userProfile: '  https://0bef-119-76-182-47.ap.ngrok.io/upload/profile',
+            userProfile: 'https://aeb1-119-76-182-47.ap.ngrok.io/upload/profile',
         };
     }
 
