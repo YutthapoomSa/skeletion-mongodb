@@ -11,5 +11,8 @@ export class RoleDB extends Document{
         required: true,
     })
     roleName: string;
+
+    @Prop({ default: Date.now })
+    createdAt: Date;
 }
 export const RoleSchema = SchemaFactory.createForClass(RoleDB);

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ObjectId } from 'mongoose';
 import { RoleDB } from 'src/entities/role.entity';
 import { ResStatus } from 'src/share/enum/res-status.enum';
 
@@ -12,7 +13,7 @@ export class UpdateRoleReqDTO {
 
 export class UpdateRoleResDTOData {
     @ApiProperty()
-    _id: string;
+    id: ObjectId;
     @ApiProperty()
     roleName: string;
 }
@@ -42,7 +43,7 @@ export class UpdateRoleResDTO {
         // const config = new ConfigService();
 
         if (!!datas) {
-            this.resData._id = datas._id;
+            this.resData.id = datas._id;
             this.resData.roleName = datas.roleName;
         }
     }

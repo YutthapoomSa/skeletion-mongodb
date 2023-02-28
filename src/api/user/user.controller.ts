@@ -51,6 +51,13 @@ export class UserController {
         return await this.userService.getUserById(id);
     }
 
+    @Get('isAdmin')
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    async isAdmin(@User() user: UserDB) {
+        return await this.userRepository.isAdmin(user);
+    }
+
     @Get('/findAllUser')
     async findAllUser() {
         return await this.userService.findAllUser();

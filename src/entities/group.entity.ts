@@ -10,14 +10,8 @@ export class GroupDB extends Document {
         type: MongooseSchema.Types.String,
         required: true,
     })
-    name: string;
+    groupName: string;
    
-    @Prop({
-        type: MongooseSchema.Types.String,
-        required: true,
-    })
-    position: string;
-
     @Prop({ default: Date.now })
     createdAt: Date;
 }

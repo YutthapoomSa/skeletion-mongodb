@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
 import { RoleDB } from 'src/entities/role.entity';
 import { ResStatus } from 'src/share/enum/res-status.enum';
 
 export class FindAllRoleResDTOData {
     @ApiProperty()
-    _id: string;
+    _id: ObjectId;
     @ApiProperty()
     roleName: string;
 }

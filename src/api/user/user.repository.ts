@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema as MongooseSchema } from 'mongoose';
 import { GlobalResDTO } from '../global-dto/global-res.dto';
 import { ConfigService } from './../../config/config.service';
-import { UserDB, UserDBGender } from './../../entities/user.entity';
+import { UserDB, UserDBGender, UserDBRole } from './../../entities/user.entity';
 import { LogService } from './../../services/log.service';
 import { PaginationService } from './../../services/pagination.service';
 import { ResStatus } from './../../share/enum/res-status.enum';
@@ -306,6 +306,25 @@ export class UserRepository implements OnApplicationBootstrap {
 
     // ─────────────────────────────────────────────────────────────────────────────
 
+    async isAdmin(user: UserDB) {
+        const tag = this.isAdmin.name;
+        try {
+            const IsUser = await this.userModel.findOne({
+                where: {
+                    id: user.id,
+                },
+            });
+            if (IsUser.role === UserDBRole.Admin) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error(`${tag} -> `, error);
+            this.logger.error(`${tag} -> `, error);
+            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     async deleteUserByUserId(userId: string, user: UserDB) {
         const tag = this.deleteUserByUserId.name;
         try {

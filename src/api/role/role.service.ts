@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { error } from 'console';
 import { Model } from 'mongoose';
 import { RoleDB } from 'src/entities/role.entity';
 import { LogService } from 'src/services/log.service';
-import { CreateRoleReqDTO, CreateRoleResDTO } from './dto/create-role.dto';
 import { ResStatus } from 'src/share/enum/res-status.enum';
-import { FindOneRoleResDTO } from './dto/findOne-role.dto';
-import { error } from 'console';
-import { FindAllRoleResDTO } from './dto/findAll.-role.dto';
-import { UpdateRoleReqDTO, UpdateRoleResDTO } from './dto/update-role.dto';
 import { GlobalResDTO } from '../global-dto/global-res.dto';
+import { CreateRoleReqDTO, CreateRoleResDTO } from './dto/create-role.dto';
+import { FindAllRoleResDTO } from './dto/findAll.-role.dto';
+import { FindOneRoleResDTO } from './dto/findOne-role.dto';
+import { UpdateRoleReqDTO } from './dto/update-role.dto';
 
 @Injectable()
 export class RoleService implements OnApplicationBootstrap {
@@ -82,9 +82,9 @@ export class RoleService implements OnApplicationBootstrap {
                 },
             );
             if (result) {
-                return new UpdateRoleResDTO(ResStatus.success, 'สำเร็จ', result);
+                return result;
             } else {
-                throw new error('data not found');
+                throw new error('Failed to update role with ID ${_id}');
             }
         } catch (error) {
             console.error(`${tag} -> `, error);
@@ -103,7 +103,7 @@ export class RoleService implements OnApplicationBootstrap {
             if (result) {
                 return new GlobalResDTO(ResStatus.success, 'สำเร็จ');
             } else {
-                throw new Error('data not found');
+                throw new Error('Failed to delete role with ID ${_id}');
             }
         } catch (error) {
             console.error(`${tag} -> `, error);
