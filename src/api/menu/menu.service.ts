@@ -2,13 +2,15 @@ import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@
 import { CreateMenuReqDTO, CreateMenuResDTO } from './dto/create-menu.dto';
 import { PaginationService } from './../../services/pagination.service';
 import { UserDB, UserDBRole } from './../../entities/user.entity';
-import { MenuDB, SubMenuDB } from './../../entities/menu.entity';
+import { MenuDB } from './../../entities/menu.entity';
 import { ResStatus } from './../../share/enum/res-status.enum';
 import { ConfigService } from './../../config/config.service';
 import { LogService } from './../../services/log.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateMenuReqDTO, UpdateMenuResDTO, UpdateMenuResDTOData } from './dto/update-menu.dto';
+import { findAllMenuDTO } from './dto/finAll-menu.dto';
+import { findOneMenuDTO } from './dto/findOne-menu.dto';
 
 @Injectable()
 export class MenuService implements OnApplicationBootstrap {
@@ -17,8 +19,6 @@ export class MenuService implements OnApplicationBootstrap {
     constructor(
         @InjectModel(MenuDB.name)
         private readonly menuModel: Model<MenuDB>,
-        @InjectModel(SubMenuDB.name)
-        private readonly subMenuModel: Model<SubMenuDB>,
         private configService: ConfigService,
         private paginationService: PaginationService,
     ) {}
@@ -85,6 +85,42 @@ export class MenuService implements OnApplicationBootstrap {
             }
 
             return new UpdateMenuResDTO(ResStatus.success, 'Success', updatedMenu);
+        } catch (error) {
+            console.error(`${tag} -> `, error);
+            this.logger.error(`${tag} -> `, error);
+            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async findAllMenu() {
+        const tag = this.findAllMenu.name;
+        try {
+            const menus = await this.menuModel.find();
+
+            if (menus) {
+                return new findAllMenuDTO(ResStatus.success, 'Success', menus);
+            } else {
+                throw new Error('No menu found');
+            }
+        } catch (error) {
+            console.error(`${tag} -> `, error);
+            this.logger.error(`${tag} -> `, error);
+            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async findOneMenu(_id: string) {
+        const tag = this.findAllMenu.name;
+        try {
+            if (!_id) throw new Error('id is required 🤬');
+
+            const menu = await this.menuModel.findById(_id);
+
+            if (menu) {
+                return new findOneMenuDTO(ResStatus.success, 'Success', menu);
+            } else {
+                throw new Error('No menu found');
+            }
         } catch (error) {
             console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);

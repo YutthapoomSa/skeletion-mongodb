@@ -6,7 +6,7 @@ import { LogService } from './../../services/log.service';
 import { UserDB } from './../../entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { MenuService } from './menu.service';
-import { Param, Patch } from '@nestjs/common/decorators';
+import { Get, Param, Patch } from '@nestjs/common/decorators';
 import { UpdateMenuReqDTO, UpdateMenuResDTOData } from './dto/update-menu.dto';
 
 @ApiTags('Menu')
@@ -26,8 +26,17 @@ export class MenuController {
         return await this.menuService.createMenu(user, body);
     }
 
-    @Patch('updateMenu/:_id')
-    async UpdateMenu(@User() user: UserDB, @Body() body: UpdateMenuReqDTO, @Param('_id') _id: string) {
-        return await this.menuService.updateMenu(user, body, _id);
+    // @Patch('updateMenu/:_id')
+    // async UpdateMenu(@User() user: UserDB, @Body() body: UpdateMenuReqDTO, @Param('_id') _id: string) {
+    //     return await this.menuService.updateMenu(body, _id);
+    // }
+
+    @Get('findAllMenu')
+    async findAllMenu() {
+        return await this.menuService.findAllMenu();
+    }
+    @Get('findOneMenu/:_id')
+    async findOneMenu(@Param('_id') _id: string) {
+        return await this.menuService.findOneMenu(_id);
     }
 }

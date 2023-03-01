@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { GroupSchema, GroupDB } from './group.entity';
 
 @Schema({
     collection: 'roleUser',
@@ -11,6 +12,9 @@ export class RoleDB extends Document{
         required: true,
     })
     roleName: string;
+
+    @Prop({ type: [GroupSchema] })
+    groupList: GroupDB[];
 
     @Prop({ default: Date.now })
     createdAt: Date;

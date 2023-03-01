@@ -10,6 +10,7 @@ import { CreateRoleReqDTO, CreateRoleResDTO } from './dto/create-role.dto';
 import { FindAllRoleResDTO } from './dto/findAll.-role.dto';
 import { FindOneRoleResDTO } from './dto/findOne-role.dto';
 import { UpdateRoleReqDTO } from './dto/update-role.dto';
+var mongoose = require('mongoose');
 
 @Injectable()
 export class RoleService implements OnApplicationBootstrap {
@@ -26,11 +27,15 @@ export class RoleService implements OnApplicationBootstrap {
         try {
             if (!body) throw new Error('data is required 🤬');
 
+            const groupIds = body.groupList.map((id) => mongoose.Types.ObjectId(id));
+
             const result = new this.roleModel({
                 roleName: body.roleName,
+                groupList: groupIds,
             });
-            await result.save();
-            return new CreateRoleResDTO(ResStatus.success, 'สร้างสิทธิ์การใช้งานสำเร็จ', result);
+
+            const savedResult = await result.save();
+            return new CreateRoleResDTO(ResStatus.success, 'สร้างสิทธิ์การใช้งานสำเร็จ', savedResult);
         } catch (error) {
             console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);

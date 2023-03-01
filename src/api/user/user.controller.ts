@@ -94,11 +94,11 @@ export class UserController {
         return await this.userService.deleteUserByUserId(userId, user);
     }
 
-    @Post('uploads-image/imageUser')
+    @Post('uploads-image/users')
     @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'เพิ่มรูปภาพของผู้ใช้งาน' })
     @UseInterceptors(
-        FilesInterceptor('profile', 1, {
+        FilesInterceptor('imageUser', 1, {
             limits: {
                 fileSize: 5 * 1024 * 1024,
             },
