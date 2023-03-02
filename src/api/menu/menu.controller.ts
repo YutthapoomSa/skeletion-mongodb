@@ -26,15 +26,13 @@ export class MenuController {
         return await this.menuService.createMenu(user, body);
     }
 
-    @Patch('/updateMenuByMenuID/:id')
-    // @ApiBearerAuth()
-    // @UseGuards(AuthGuard('jwt'))
-    async updateMenu(
-        @User() user: UserDB, 
-        @Param('id') menuId: string, 
-        @Body() body: UpdateMenuReqDTO) {
-        return await this.menuService.updateMenu(menuId, body);
-    }
+    // Todo Fix bug uodateMenu─────────────────────────────────────────────────────────────────────
+    // @Patch('/updateMenuByMenuID/:_id')
+    // // @ApiBearerAuth()
+    // // @UseGuards(AuthGuard('jwt'))
+    // async updateMenu(@User() user: UserDB, @Param('_id') _id: string, @Body() body: UpdateMenuReqDTO) {
+    //     return await this.menuService.updateMenu(_id, body);
+    // }
 
     @Get('findAllMenu')
     async findAllMenu() {

@@ -49,18 +49,16 @@ export class MenuService implements OnApplicationBootstrap {
 
     // ───────────────────────────UpdateMenu 👇🏻──────────────────────────────────────
 
-    async updateMenu(body: UpdateMenuReqDTO, user: UserDB, menuId: string) {
+    async updateMenu(body: UpdateMenuReqDTO, _id: string) {
         const tag = this.updateMenu.name;
         try {
-            if (String(user.role) === String(UserDBRole.Admin)) throw new Error('😡 Not authorized');
-            // if (!_id) throw new Error('id is required 😡');
             if (!body) throw new Error('data not found 🕵🏻');
-            const menu = await this.menuModel.findById(menuId);
+            const menu = await this.menuModel.findById(_id);
             const subMenuList = body.subMenuList ? body.subMenuList.map((id) => new mongoose.Types.ObjectId(id)) : menu.subMenuList;
 
-            const updateMenu = await this.menuModel.updateOne(
+            const updateMenu = await this.menuModel.findById(
                 {
-                    _id: menuId,
+                    id: _id,
                 },
                 {
                     $set: {
@@ -72,7 +70,7 @@ export class MenuService implements OnApplicationBootstrap {
             if (!updateMenu) {
                 throw new Error('Could not find menu to update');
             }
-            return new UpdateMenuResDTO(ResStatus.success, 'Success', await updateMenu.save());
+            return new UpdateMenuResDTO(ResStatus.success, 'Success', updateMenu);
         } catch (error) {
             console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);
@@ -83,14 +81,7 @@ export class MenuService implements OnApplicationBootstrap {
     async findAllMenu() {
         const tag = this.findAllMenu.name;
         try {
-            const menus = await this.menuModel.find().populate({
-                path: 'subMenuList',
-                populate: [
-                    {
-                        path: 'nameSubmenu iframe ExternalLink InternalLink',
-                    },
-                ],
-            });
+            const menus = await this.menuModel.find().select('_id name');
 
             if (menus) {
                 return menus;

@@ -22,7 +22,7 @@ async function bootstrap() {
     app.use(json({ limit: '300mb' }));
     app.use(compression());
     app.use(urlencoded({ extended: true, limit: '300mb' }));
-    app.set('x-powered-by', true);
+    app.set('x-powered-by', false);
 
     // ────────────────────────────────────────────────────────────────────────────────
 
