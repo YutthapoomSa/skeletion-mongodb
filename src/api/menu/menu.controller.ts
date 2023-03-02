@@ -18,25 +18,38 @@ export class MenuController {
     // ─────────────────────────────────────────────────────────────
 
     @Post('createMenu')
-    @ApiBearerAuth()
-    @UseGuards(AuthGuard('jwt'))
+    // @ApiBearerAuth()
+    // @UseGuards(AuthGuard('jwt'))
     @ApiOperation({ summary: 'สร้างข้อมูลรายการเมนู' })
     @ApiOkResponse({ type: CreateMenuResDTO })
     async CreateMenu(@User() user: UserDB, @Body() body: CreateMenuReqDTO) {
         return await this.menuService.createMenu(user, body);
     }
 
-    // @Patch('updateMenu/:_id')
-    // async UpdateMenu(@User() user: UserDB, @Body() body: UpdateMenuReqDTO, @Param('_id') _id: string) {
-    //     return await this.menuService.updateMenu(body, _id);
-    // }
+    @Patch('/updateMenuByMenuID/:id')
+    // @ApiBearerAuth()
+    // @UseGuards(AuthGuard('jwt'))
+    async updateMenu(
+        @User() user: UserDB, 
+        @Param('id') menuId: string, 
+        @Body() body: UpdateMenuReqDTO) {
+        return await this.menuService.updateMenu(menuId, body);
+    }
 
     @Get('findAllMenu')
     async findAllMenu() {
         return await this.menuService.findAllMenu();
     }
+
     @Get('findOneMenu/:_id')
     async findOneMenu(@Param('_id') _id: string) {
         return await this.menuService.findOneMenu(_id);
+    }
+
+    @Get('/getMenuById/:id')
+    // @ApiBearerAuth()
+    // @UseGuards(AuthGuard('jwt'))
+    async getCompanyById(@Param('id') id: string) {
+        return await this.menuService.getMenuById(`${id}`);
     }
 }

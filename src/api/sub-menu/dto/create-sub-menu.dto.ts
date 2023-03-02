@@ -23,7 +23,7 @@ export class CreateSubMenuReqDTO {
     InternalLink: string;
 }
 
-export class CreateSubNenuDTOData {
+export class CreateSubMenuDTOData {
     @ApiProperty()
     id: ObjectId;
     @ApiProperty()
@@ -44,10 +44,10 @@ export class CreateSubmenuResDTO {
     resCode: ResStatus;
 
     @ApiProperty({
-        type: () => CreateSubNenuDTOData,
+        type: () => CreateSubMenuDTOData,
         description: 'ข้อมูล',
     })
-    resData: CreateSubNenuDTOData;
+    resData: CreateSubMenuDTOData;
 
     @ApiProperty({
         description: 'ข้อความอธิบาย',
@@ -57,7 +57,7 @@ export class CreateSubmenuResDTO {
     constructor(resCode: ResStatus, msg: string, datas: SubMenuDB) {
         this.resCode = resCode;
         this.msg = msg;
-        this.resData = new CreateSubNenuDTOData();
+        this.resData = new CreateSubMenuDTOData();
         // const config = new ConfigService();
 
         if (!!datas) {

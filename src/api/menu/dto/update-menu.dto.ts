@@ -1,25 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
+import { ObjectId } from 'mongoose';
 import { MenuDB } from 'src/entities/menu.entity';
 import { ResStatus } from 'src/share/enum/res-status.enum';
-export class SubMenuDataDTO {
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    nameSubmenu: string;
-
-    @ApiProperty()
-    @IsString()
-    iframe?: string;
-
-    @ApiProperty()
-    @IsString()
-    ExternalLink?: string;
-
-    @ApiProperty()
-    @IsString()
-    InternalLink?: string;
-}
 
 export class UpdateMenuReqDTO {
     @ApiProperty()
@@ -27,15 +10,25 @@ export class UpdateMenuReqDTO {
     @IsString()
     name: string;
 
-    @ApiProperty({
-        type: [SubMenuDataDTO],
-    })
-    @IsOptional()
+    @ApiProperty()
     @IsArray()
-    subMenuList: SubMenuDataDTO[];
+    subMenuList: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+
+export class submenuData {
+    @ApiProperty()
+    id: ObjectId;
+    @ApiProperty()
+    subMenuName: string;
+    @ApiProperty()
+    iframe: string;
+    @ApiProperty()
+    ExternalLink: string;
+    @ApiProperty()
+    InternalLink: string;
+}
 
 export class UpdateMenuResDTOData {
     @ApiProperty()
@@ -45,10 +38,9 @@ export class UpdateMenuResDTOData {
     name: string;
 
     @ApiProperty({
-        type: [SubMenuDataDTO],
+        type: () => [submenuData],
     })
-    @IsArray()
-    subMenuList: SubMenuDataDTO[];
+    subMenuList: submenuData[];
 }
 
 export class UpdateMenuResDTO {
@@ -73,19 +65,21 @@ export class UpdateMenuResDTO {
         this.resCode = resCode;
         this.msg = msg;
         this.resData = new UpdateMenuResDTOData();
+
         if (!!datas) {
             this.resData.id = datas._id;
             this.resData.name = datas.name;
             this.resData.subMenuList = [];
 
             if (!!datas.subMenuList && datas.subMenuList.length > 0) {
-                for (const iterator of datas.subMenuList) {
-                    const _subMenuList = new SubMenuDataDTO();
-                    _subMenuList.nameSubmenu = iterator.nameSubmenu;
-                    _subMenuList.iframe = iterator.iframe ? iterator.iframe : null;
-                    _subMenuList.ExternalLink = iterator.ExternalLink ? iterator.ExternalLink : null;
-                    _subMenuList.InternalLink = iterator.InternalLink ? iterator.InternalLink : null;
-                    this.resData.subMenuList.push(_subMenuList);
+                for (const iterator of this.resData.subMenuList) {
+                    const _subMenu = new submenuData();
+                    _subMenu.id = iterator.id;
+                    _subMenu.subMenuName = iterator.subMenuName;
+                    _subMenu.iframe = iterator.iframe;
+                    _subMenu.ExternalLink = iterator.ExternalLink;
+                    _subMenu.InternalLink = iterator.InternalLink;
+                    this.resData.subMenuList.push(_subMenu);
                 }
             }
         }
