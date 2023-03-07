@@ -9,4 +9,4 @@ WORKDIR /apps/
 RUN npm install
 EXPOSE 3000
 #run command
-CMD ["npm","start"]
+CMD ["npm","start","dev"]

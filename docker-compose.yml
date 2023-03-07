@@ -1,14 +1,14 @@
-version: '3.7'
-services:
-  mongodb_container:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data_container:/data/db
+version: '3'
 
-volumes:
-  mongodb_data_container:
+services:
+    web-node-js:
+        image: yutthapoomsa/skeletion:latest
+        ports:
+            - "3000:3000"
+        environment:
+            - MONGODB_ADDON_URI=mongodb://mongodb:27017/skeletion
+    mongodb:
+        image: mongo:latest
+        ports: 
+            - "27017:27017"
+        
