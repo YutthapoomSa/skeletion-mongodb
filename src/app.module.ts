@@ -7,6 +7,8 @@ import { LogService } from './services/log.service';
 import { ShareModule } from './share/share.module';
 import { GroupModule } from './api/group/group.module';
 import { MenuModule } from './api/menu/menu.module';
+import { SubMenuModule } from './api/sub-menu/sub-menu.module';
+import { RoleModule } from './api/role/role.module';
 import { MenuModule } from './api/menu/menu.module';
 
 @Module({
@@ -20,6 +22,8 @@ import { MenuModule } from './api/menu/menu.module';
         UserModule,
         GroupModule,
         MenuModule,
+        RoleModule,
+        SubMenuModule,
     ],
     controllers: [],
     providers: [LogService],

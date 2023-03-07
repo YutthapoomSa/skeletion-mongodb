@@ -2,25 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
 import { ResStatus } from './../../../share/enum/res-status.enum';
 import { MenuDB } from './../../../entities/menu.entity';
-
-export class SubMenuDataDTO {
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    nameSubmenu: string;
-
-    @ApiProperty()
-    @IsString()
-    iframe?: string;
-
-    @ApiProperty()
-    @IsString()
-    ExternalLink?: string;
-
-    @ApiProperty()
-    @IsString()
-    InternalLink?: string;
-}
+import { ObjectId } from 'mongoose';
 
 export class CreateMenuReqDTO {
     @ApiProperty()
@@ -28,12 +10,9 @@ export class CreateMenuReqDTO {
     @IsString()
     name: string;
 
-    @ApiProperty({
-        type: [SubMenuDataDTO],
-    })
-    @IsOptional()
+    @ApiProperty()
     @IsArray()
-    subMenuList: SubMenuDataDTO[];
+    subMenuList: string[];
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -44,11 +23,8 @@ export class CreateMenuResDTOData {
     @ApiProperty()
     name: string;
 
-    @ApiProperty({
-        type: [SubMenuDataDTO],
-    })
-    @IsArray()
-    subMenuList: SubMenuDataDTO[];
+    @ApiProperty()
+    subMenuList: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -82,13 +58,7 @@ export class CreateMenuResDTO {
             this.resData.subMenuList = [];
 
             if (!!datas.subMenuList && datas.subMenuList.length > 0) {
-                for (const iterator of datas.subMenuList) {
-                    const _subMenuList = new SubMenuDataDTO();
-                    _subMenuList.nameSubmenu = iterator.nameSubmenu;
-                    _subMenuList.iframe = iterator.iframe ? iterator.iframe : null;
-                    _subMenuList.ExternalLink = iterator.ExternalLink ? iterator.ExternalLink : null;
-                    _subMenuList.InternalLink = iterator.InternalLink ? iterator.InternalLink : null;
-                    this.resData.subMenuList.push(_subMenuList);
+                for (const iterator of this.resData.subMenuList) {
                 }
             }
         }

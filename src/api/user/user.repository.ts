@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema as MongooseSchema } from 'mongoose';
 import { GlobalResDTO } from '../global-dto/global-res.dto';
 import { ConfigService } from './../../config/config.service';
-import { UserDB, UserDBGender } from './../../entities/user.entity';
+import { UserDB, UserDBGender, UserDBRole } from './../../entities/user.entity';
 import { LogService } from './../../services/log.service';
 import { PaginationService } from './../../services/pagination.service';
 import { ResStatus } from './../../share/enum/res-status.enum';
@@ -12,6 +12,7 @@ import { CreateUserImage } from './dto/create-user-image.dto';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserPaginationDTO, UserPaginationResDTO } from './dto/pagination-user.dto';
 import { UpdateUserReqDto } from './dto/updateUser.dto';
+import { UploadUserImageDtoRes } from './dto/uploadImageUser.dto';
 var CryptoJS = require('crypto-js');
 var mongoose = require('mongoose');
 export class UserRepository implements OnApplicationBootstrap {
@@ -189,66 +190,80 @@ export class UserRepository implements OnApplicationBootstrap {
         return false;
     }
 
-    // ────────────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────────
 
-    async userPagination(paginationDTO: UserPaginationDTO) {
-        const tag = this.userPagination.name;
+    async findOneUserImage(_id: string) {
+        const tag = this.findOneUserImage.name;
         try {
-            const resData = {
-                totalItems: 0,
-                itemsPerPage: 0,
-                totalPages: 0,
-                currentPage: paginationDTO.page,
-                data: [],
-            };
-
-            let conditionFind = {};
-
-            if (paginationDTO?.search) {
-                conditionFind = {
-                    $or: [
-                        { firstName: { $regex: '.*' + paginationDTO.search + '.*' } },
-                        { lastName: { $regex: '.*' + paginationDTO.search + '.*' } },
-                        { role: { $regex: '.*' + paginationDTO.search + '.*' } },
-                    ],
-                };
-            }
-
-            // จำนวนข้อมูลทั้งหมด ตามเงื่อนไข
-            resData.totalItems = await this.userModel.count(conditionFind);
-
-            // คำนวณชุดข้อมูล
-            const padding = this.paginationService.paginationCal(resData.totalItems, paginationDTO.perPages, paginationDTO.page);
-
-            resData.totalPages = padding.totalPages;
-
-            resData.data = await this.userModel.find(conditionFind).select('-__v -password').limit(padding.limit).skip(padding.skips);
-
-            resData.itemsPerPage = resData.data.length;
-
-            // user ─────────────────────────────────────────────────────────────────────────────────
-
-            return new UserPaginationResDTO(
-                ResStatus.success,
-                '',
-                resData.data,
-                resData.totalItems,
-                resData.itemsPerPage,
-                resData.totalPages,
-                resData.currentPage,
-            );
+            const template = await this.userModel.findById(_id);
+            if (!template) throw new Error('assessment not found.');
+            return template;
         } catch (error) {
-            console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);
             throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    // ────────────────────────────────────────────────────────────────────────────────
+
+    // async userPagination(paginationDTO: UserPaginationDTO) {
+    //     const tag = this.userPagination.name;
+    //     try {
+    //         const resData = {
+    //             totalItems: 0,
+    //             itemsPerPage: 0,
+    //             totalPages: 0,
+    //             currentPage: paginationDTO.page,
+    //             data: [],
+    //         };
+
+    //         let conditionFind = {};
+
+    //         if (paginationDTO?.search) {
+    //             conditionFind = {
+    //                 $or: [
+    //                     { firstName: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                     { lastName: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                     { role: { $regex: '.*' + paginationDTO.search + '.*' } },
+    //                 ],
+    //             };
+    //         }
+
+    //         // จำนวนข้อมูลทั้งหมด ตามเงื่อนไข
+    //         resData.totalItems = await this.userModel.count(conditionFind);
+
+    //         // คำนวณชุดข้อมูล
+    //         const padding = this.paginationService.paginationCal(resData.totalItems, paginationDTO.perPages, paginationDTO.page);
+
+    //         resData.totalPages = padding.totalPages;
+
+    //         resData.data = await this.userModel.find(conditionFind).select('-__v -password').limit(padding.limit).skip(padding.skips);
+
+    //         resData.itemsPerPage = resData.data.length;
+
+    //         // user ─────────────────────────────────────────────────────────────────────────────────
+
+    //         return new UserPaginationResDTO(
+    //             ResStatus.success,
+    //             '',
+    //             resData.data,
+    //             resData.totalItems,
+    //             resData.itemsPerPage,
+    //             resData.totalPages,
+    //             resData.currentPage,
+    //         );
+    //     } catch (error) {
+    //         console.error(`${tag} -> `, error);
+    //         this.logger.error(`${tag} -> `, error);
+    //         throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
     async uploadUserImage(imageUser: Express.Multer.File[], _userId: string, body: CreateUserImage) {
         const tag = this.uploadUserImage.name;
         try {
             if (!imageUser || imageUser.length === 0) {
-                throw new HttpException(`cannot image user`, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new HttpException(`ไม่เจอรูปภาพ`, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
             const findUserById = await this.findOneUser(_userId);
@@ -256,11 +271,11 @@ export class UserRepository implements OnApplicationBootstrap {
             this.logger.debug('_userId -> ', _userId);
             // this.logger.debug('imageUser -> ', imageUser);
             if (!findUserById) throw new HttpException(`cannot find user by id`, HttpStatus.INTERNAL_SERVER_ERROR);
-            this.logger.debug('user id data -> ', findUserById);
+            this.logger.debug('user id data -> ', JSON.stringify(findUserById));
             findUserById.imageUser = imageUser[0].filename;
             await findUserById.save();
 
-            return new GlobalResDTO(ResStatus.success, 'อัพโหลดรูปสำเร็จ 📷');
+            return new UploadUserImageDtoRes(ResStatus.success, 'อัพโหลดรูปสำเร็จ', findUserById);
         } catch (error) {
             console.error(`${tag} -> `, error);
             this.logger.error(`${tag} -> `, error);
@@ -306,6 +321,25 @@ export class UserRepository implements OnApplicationBootstrap {
 
     // ─────────────────────────────────────────────────────────────────────────────
 
+    async isAdmin(user: UserDB) {
+        const tag = this.isAdmin.name;
+        try {
+            const IsUser = await this.userModel.findOne({
+                where: {
+                    id: user.id,
+                },
+            });
+            if (IsUser.role === UserDBRole.Admin) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error(`${tag} -> `, error);
+            this.logger.error(`${tag} -> `, error);
+            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     async deleteUserByUserId(userId: string, user: UserDB) {
         const tag = this.deleteUserByUserId.name;
         try {
@@ -329,7 +363,6 @@ export class UserRepository implements OnApplicationBootstrap {
         try {
             const user = await this.userModel.findById(id);
             return user;
-            // return new FindOneAssessmentDTO(ResStatus.success, '', template);
         } catch (error) {
             this.logger.error(`${tag} -> `, error);
             throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -20,30 +20,6 @@ export enum UserDBPrefix {
     Mrs = 'นาง',
     Miss = 'นางสาว',
 }
-
-// ────────────────────────────────────────────────────────────────────────────────
-
-@Schema({
-    collection: 'userRole',
-    _id: true,
-})
-export class UserRoleDB extends Document {
-    @Prop({
-        enum: Object.keys(UserDBRole).map((k) => UserDBRole[k]),
-        required: true,
-        default: UserDBRole.User,
-    })
-    role: UserDBRole;
-
-    @Prop({
-        type: MongooseSchema.Types.ObjectId,
-        ref: GroupDB.name,
-        required: false,
-    })
-    group: MongooseSchema.Types.ObjectId;
-}
-export const UserRoleSchema = SchemaFactory.createForClass(UserRoleDB);
-
 @Schema({
     collection: 'user',
     _id: true,

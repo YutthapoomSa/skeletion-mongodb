@@ -1,27 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
 import { ObjectId } from 'mongoose';
-import { MenuDB } from 'src/entities/menu.entity';
-import { ResStatus } from 'src/share/enum/res-status.enum';
-
-export class UpdateMenuReqDTO {
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    name: string;
-
-    @ApiProperty()
-    @IsArray()
-    subMenuList: string[];
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
+import { ResStatus } from './../../../share/enum/res-status.enum';
+import { MenuDB } from './../../../entities/menu.entity';
 
 export class submenuData {
     @ApiProperty()
     id: ObjectId;
     @ApiProperty()
-    subMenuName: string;
+    nameSubmenu: string;
     @ApiProperty()
     iframe: string;
     @ApiProperty()
@@ -30,20 +16,18 @@ export class submenuData {
     InternalLink: string;
 }
 
-export class UpdateMenuResDTOData {
+export class findOneMenuDTOData {
     @ApiProperty()
     id: string;
-
     @ApiProperty()
     name: string;
-
     @ApiProperty({
-        type: () => [submenuData],
+        type: [submenuData],
     })
     subMenuList: submenuData[];
 }
 
-export class UpdateMenuResDTO {
+export class findOneMenuDTO {
     @ApiProperty({
         enum: Object.keys(ResStatus).map((k) => ResStatus[k]),
         description: 'รหัสสถานะ',
@@ -51,10 +35,10 @@ export class UpdateMenuResDTO {
     resCode: ResStatus;
 
     @ApiProperty({
-        type: () => UpdateMenuResDTOData,
+        type: () => findOneMenuDTOData,
         description: 'ข้อมูล',
     })
-    resData: UpdateMenuResDTOData;
+    resData: findOneMenuDTOData;
 
     @ApiProperty({
         description: 'ข้อความอธิบาย',
@@ -64,18 +48,18 @@ export class UpdateMenuResDTO {
     constructor(resCode: ResStatus, msg: string, datas: MenuDB) {
         this.resCode = resCode;
         this.msg = msg;
-        this.resData = new UpdateMenuResDTOData();
+        this.resData = new findOneMenuDTOData();
 
         if (!!datas) {
-            this.resData.id = datas._id;
+            this.resData.id = datas.id;
             this.resData.name = datas.name;
             this.resData.subMenuList = [];
 
-            if (!!datas.subMenuList && datas.subMenuList.length > 0) {
+            if (!!this.resData.subMenuList && this.resData.subMenuList.length > 0) {
                 for (const iterator of this.resData.subMenuList) {
                     const _subMenu = new submenuData();
                     _subMenu.id = iterator.id;
-                    _subMenu.subMenuName = iterator.subMenuName;
+                    _subMenu.nameSubmenu = iterator.nameSubmenu;
                     _subMenu.iframe = iterator.iframe;
                     _subMenu.ExternalLink = iterator.ExternalLink;
                     _subMenu.InternalLink = iterator.InternalLink;

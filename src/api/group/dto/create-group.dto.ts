@@ -7,12 +7,7 @@ export class CreateGroupDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    name: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    position: string;
+    groupName: string;
 }
 
 export class CreateGroupResDTOData {
@@ -20,10 +15,7 @@ export class CreateGroupResDTOData {
     id: string;
 
     @ApiProperty()
-    name: string;
-
-    @ApiProperty()
-    position: string;
+    groupName: string;
 }
 
 export class CreateGroupResDTO {
@@ -50,8 +42,7 @@ export class CreateGroupResDTO {
         this.resData = new CreateGroupResDTOData();
         // const config = new ConfigService();
 
-        this.resData.id = datas.id;
-        this.resData.name = datas.name;
-        this.resData.position = datas.position;
+        this.resData.id = datas._id;
+        this.resData.groupName = datas.groupName;
     }
 }

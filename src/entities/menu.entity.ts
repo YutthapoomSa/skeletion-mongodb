@@ -1,36 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-
-@Schema({
-    collection: 'subMenu',
-    _id: false,
-})
-export class SubMenuDB extends Document {
-    @Prop({
-        type: MongooseSchema.Types.String,
-        required: true,
-    })
-    nameSubmenu: string;
-
-    @Prop({
-        type: MongooseSchema.Types.String,
-        allowNull: true,
-    })
-    iframe: string;
-
-    @Prop({
-        type: MongooseSchema.Types.String,
-        allowNull: true,
-    })
-    ExternalLink: string;
-
-    @Prop({
-        type: MongooseSchema.Types.String,
-        allowNull: true,
-    })
-    InternalLink: string;
-}
-export const SubMenuSchema = SchemaFactory.createForClass(SubMenuDB);
+import { SubMenuDB } from 'src/entities/sub-menu.entity';
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -46,9 +16,9 @@ export class MenuDB extends Document {
     name: string;
 
     @Prop({
-        type: [SubMenuSchema],
-        required: true,
+        type: [{ type: MongooseSchema.Types.ObjectId, ref: SubMenuDB.name }],
+        required: false,
     })
-    subMenuList: SubMenuDB[];
+    subMenuList: MongooseSchema.Types.ObjectId[];
 }
 export const MenuSchema = SchemaFactory.createForClass(MenuDB);

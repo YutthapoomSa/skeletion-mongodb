@@ -51,6 +51,13 @@ export class UserController {
         return await this.userService.getUserById(id);
     }
 
+    @Get('isAdmin')
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    async isAdmin(@User() user: UserDB) {
+        return await this.userRepository.isAdmin(user);
+    }
+
     @Get('/findAllUser')
     async findAllUser() {
         return await this.userService.findAllUser();
@@ -64,14 +71,14 @@ export class UserController {
     //     return await this.userService.getUserById(user.id);
     // }
 
-    @Post('paginationUser')
-    // @ApiBearerAuth()
-    // @UseGuards(AuthGuard('jwt'))
-    @ApiOkResponse({ type: UserPaginationResDTO })
-    @ApiOperation({ summary: 'pagination user' })
-    async paginationUser(@Body() paginationDTO: UserPaginationDTO) {
-        return await this.userRepository.userPagination(paginationDTO);
-    }
+    // @Post('paginationUser')
+    // // @ApiBearerAuth()
+    // // @UseGuards(AuthGuard('jwt'))
+    // @ApiOkResponse({ type: UserPaginationResDTO })
+    // @ApiOperation({ summary: 'pagination user' })
+    // async paginationUser(@Body() paginationDTO: UserPaginationDTO) {
+    //     return await this.userRepository.userPagination(paginationDTO);
+    // }
 
     @Patch('update/:userId')
     @ApiBearerAuth()
@@ -87,11 +94,11 @@ export class UserController {
         return await this.userService.deleteUserByUserId(userId, user);
     }
 
-    @Post('uploads-image/imageUser')
+    @Post('uploads-image/users')
     @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'เพิ่มรูปภาพของผู้ใช้งาน' })
     @UseInterceptors(
-        FilesInterceptor('profile', 1, {
+        FilesInterceptor('imageUser', 1, {
             limits: {
                 fileSize: 5 * 1024 * 1024,
             },

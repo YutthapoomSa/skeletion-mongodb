@@ -1,23 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { GroupDB } from 'src/entities/group.entity';
+import { ObjectId } from 'mongoose';
+import { RoleDB } from 'src/entities/role.entity';
 import { ResStatus } from 'src/share/enum/res-status.enum';
 
-export class UpdateGroupReqDTO {
+export class FindAllRoleResDTOData {
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    groupName: string;
+    _id: ObjectId;
+    @ApiProperty()
+    roleName: string;
 }
 
-export class UpdateGroupResDTOData {
-    @ApiProperty()
-    id: string;
-    @ApiProperty()
-    groupName: string;
-}
-
-export class UpdateGroupResDTO {
+export class FindAllRoleResDTO {
     @ApiProperty({
         enum: Object.keys(ResStatus).map((k) => ResStatus[k]),
         description: 'รหัสสถานะ',
@@ -25,25 +18,29 @@ export class UpdateGroupResDTO {
     resCode: ResStatus;
 
     @ApiProperty({
-        type: () => UpdateGroupResDTOData,
+        type: () => [FindAllRoleResDTOData],
         description: 'ข้อมูล',
     })
-    resData: UpdateGroupResDTOData;
+    resData: FindAllRoleResDTOData[];
 
     @ApiProperty({
         description: 'ข้อความอธิบาย',
     })
     msg: string;
 
-    constructor(resCode: ResStatus, msg: string, datas: GroupDB) {
+    constructor(resCode: ResStatus, msg: string, datas: RoleDB[]) {
         this.resCode = resCode;
         this.msg = msg;
-        this.resData = new UpdateGroupResDTOData();
+        this.resData = [];
         // const config = new ConfigService();
 
         if (!!datas) {
-            this.resData.id = datas._id;
-            this.resData.groupName = datas.groupName;
+            for (const iterator of datas) {
+                const _data = new FindAllRoleResDTOData();
+                _data._id = iterator._id;
+                _data.roleName = iterator.roleName;
+                this.resData.push(_data);
+            }
         }
     }
 }

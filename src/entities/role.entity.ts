@@ -1,19 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { GroupSchema, GroupDB } from './group.entity';
 
 @Schema({
-    collection: 'group',
+    collection: 'roleUser',
     _id: true,
 })
-export class GroupDB extends Document {
+export class RoleDB extends Document{
     @Prop({
         type: MongooseSchema.Types.String,
         required: true,
     })
-    groupName: string;
-   
+    roleName: string;
+
+    @Prop({ type: [GroupSchema] })
+    groupList: GroupDB[];
+
     @Prop({ default: Date.now })
     createdAt: Date;
 }
-
-export const GroupSchema = SchemaFactory.createForClass(GroupDB);
+export const RoleSchema = SchemaFactory.createForClass(RoleDB);

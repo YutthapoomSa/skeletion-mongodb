@@ -1,23 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
 import { GroupDB } from 'src/entities/group.entity';
 import { ResStatus } from 'src/share/enum/res-status.enum';
 
-export class UpdateGroupReqDTO {
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    groupName: string;
-}
-
-export class UpdateGroupResDTOData {
+export class FindOneResDTOData {
     @ApiProperty()
     id: string;
     @ApiProperty()
     groupName: string;
 }
 
-export class UpdateGroupResDTO {
+export class FindOneResDTO{
     @ApiProperty({
         enum: Object.keys(ResStatus).map((k) => ResStatus[k]),
         description: 'รหัสสถานะ',
@@ -25,10 +17,10 @@ export class UpdateGroupResDTO {
     resCode: ResStatus;
 
     @ApiProperty({
-        type: () => UpdateGroupResDTOData,
+        type: () => FindOneResDTOData,
         description: 'ข้อมูล',
     })
-    resData: UpdateGroupResDTOData;
+    resData: FindOneResDTOData;
 
     @ApiProperty({
         description: 'ข้อความอธิบาย',
@@ -38,7 +30,7 @@ export class UpdateGroupResDTO {
     constructor(resCode: ResStatus, msg: string, datas: GroupDB) {
         this.resCode = resCode;
         this.msg = msg;
-        this.resData = new UpdateGroupResDTOData();
+        this.resData = new FindOneResDTOData();
         // const config = new ConfigService();
 
         if (!!datas) {

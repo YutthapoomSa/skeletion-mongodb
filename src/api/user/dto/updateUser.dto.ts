@@ -26,7 +26,6 @@ export class UpdateUserReqDto {
     phoneNumber: string;
 
     @ApiProperty()
-    @IsString()
     imageUser: string;
 }
 
