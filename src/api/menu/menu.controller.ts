@@ -1,13 +1,11 @@
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateMenuResDTO, CreateMenuReqDTO } from './dto/create-menu.dto';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { User } from './../../share/decorator/user.decorator';
-import { LogService } from './../../services/log.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { Get, Param } from '@nestjs/common/decorators';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserDB } from './../../entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
+import { LogService } from './../../services/log.service';
+import { User } from './../../share/decorator/user.decorator';
+import { CreateMenuReqDTO, CreateMenuResDTO } from './dto/create-menu.dto';
 import { MenuService } from './menu.service';
-import { Get, Param, Patch } from '@nestjs/common/decorators';
-import { UpdateMenuReqDTO, UpdateMenuResDTOData } from './dto/update-menu.dto';
 
 @ApiTags('Menu')
 @Controller('menu')

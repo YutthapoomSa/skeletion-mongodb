@@ -81,7 +81,17 @@ export class MenuService implements OnApplicationBootstrap {
     async findAllMenu() {
         const tag = this.findAllMenu.name;
         try {
-            const menus = await this.menuModel.find().select('_id name');
+            const menus = await this.menuModel
+                .find()
+                .select('_id name')
+                .populate({
+                    path: 'subMenuList',
+                    populate: [
+                        {
+                            path: 'nameSubmenu',
+                        },
+                    ],
+                });
 
             if (menus) {
                 return menus;

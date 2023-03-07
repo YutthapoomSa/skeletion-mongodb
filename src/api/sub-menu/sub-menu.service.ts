@@ -42,6 +42,25 @@ export class SubMenuService implements OnApplicationBootstrap {
         }
     }
 
+    async findOneSubMenuBySubMenuId(_id: string) {
+        const tag = this.findOneSubMenuBySubMenuId.name;
+        try {
+            if (!_id) throw new Error('id is required 🤬');
+
+            const subMenu = await this.subMenuModel.findById(_id);
+
+            if (subMenu) {
+                return subMenu;
+            } else {
+                throw new Error('No menu found');
+            }
+        } catch (error) {
+            console.error(`${tag} -> `, error);
+            this.logger.error(`${tag} -> `, error);
+            throw new HttpException(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // findAll() {
     //     return `This action returns all subMenu`;
     // }
